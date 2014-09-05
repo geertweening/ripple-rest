@@ -15,9 +15,9 @@ chai.use(sinonchai);
 
 describe('api/payments', function(){
 
-  describe('.submit.skip()', function(){
+  describe('.submit()', function(){
 
-    it.skip('should produce an error if the payment is missing', function(done){
+    it('should produce an error if the payment is missing', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -41,7 +41,7 @@ describe('api/payments', function(){
         return Server;
       };
 
-      payments.submit.skip({
+      var request = {
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -52,25 +52,28 @@ describe('api/payments', function(){
               throw new Error('Not implemented');
             }
           }
-        }
-      }, {
+        },
         body: {
           secret: 'somesecret',
           client_resource_id: 'someid'
         },
         protocol: 'http',
         host: 'localhost'
-      }, {
+      };
+
+      var response = {
         json: function(status_code, json_response) {
           expect(status_code).to.equal(400);
           expect(json_response.success).to.be.false;
           expect(json_response.message).to.contain('payment');
           done();
         }
-      });
+      };
+
+      payments.submit(request, response);
     });
 
-    it.skip('should produce an error if the secret is missing', function(done){
+    it('should produce an error if the secret is missing', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -94,7 +97,7 @@ describe('api/payments', function(){
         return Server;
       };
 
-      payments.submit.skip({
+      var request = {
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -105,8 +108,7 @@ describe('api/payments', function(){
               throw new Error('Not implemented');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -121,17 +123,21 @@ describe('api/payments', function(){
         },
         protocol: 'http',
         host: 'localhost'
-      }, {
+      };
+
+      var response = {
         json: function(status_code, json_response) {
           expect(status_code).to.equal(400);
           expect(json_response.success).to.be.false;
           expect(json_response.message).to.contain('secret');
           done();
         }
-      });
+      };
+
+      payments.submit(request, response);
     });
 
-    it.skip('should produce an error if the client_resource_id is missing', function(done){
+    it('should produce an error if the client_resource_id is missing', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -155,7 +161,7 @@ describe('api/payments', function(){
         return Server;
       };
 
-      payments.submit.skip({
+      var request = {
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -166,8 +172,7 @@ describe('api/payments', function(){
               throw new Error('Not implemented');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -182,17 +187,21 @@ describe('api/payments', function(){
         },
         protocol: 'http',
         host: 'localhost'
-      }, {
+      };
+
+      var response = {
         json: function(status_code, json_response) {
           expect(status_code).to.equal(400);
           expect(json_response.success).to.be.false;
           expect(json_response.message).to.contain('client_resource_id');
           done();
         }
-      });
+      };
+
+      payments.submit(request, response);
     });
 
-    it.skip('should produce an error if the client_resource_id is invalid', function(done){
+    it('should produce an error if the client_resource_id is invalid', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -216,45 +225,46 @@ describe('api/payments', function(){
         return Server;
       };
 
-      payments.submit.skip({
-        remote: remote,
-        dbinterface: dbinterface,
-        config: {
-          get: function(key) {
-            if (key === 'PORT') {
-              return 5990;
-            } else {
-              throw new Error('Not implemented');
-            }
-          }
-        }
-      }, {
-        body: {
-          payment: {
-            source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
-            destination_account: 'rLpq5RcRzA8FU1yUqEPW4xfsdwon7casuM',
-            destination_amount: {
-              value: '1',
-              currency: 'XRP',
-              issuer: ''
+      payments.submit(
+        {
+          remote: remote,
+          dbinterface: dbinterface,
+          config: {
+            get: function(key) {
+              if (key === 'PORT') {
+                return 5990;
+              } else {
+                throw new Error('Not implemented');
+              }
             }
           },
-          secret: 'somesecret',
-          client_resource_id: 'invalid\nclient_resource_id'
+          body: {
+            payment: {
+              source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
+              destination_account: 'rLpq5RcRzA8FU1yUqEPW4xfsdwon7casuM',
+              destination_amount: {
+                value: '1',
+                currency: 'XRP',
+                issuer: ''
+              }
+            },
+            secret: 'somesecret',
+            client_resource_id: 'invalid\nclient_resource_id'
+          },
+          protocol: 'http',
+          host: 'localhost'
         },
-        protocol: 'http',
-        host: 'localhost'
-      }, {
-        json: function(status_code, json_response) {
-          expect(status_code).to.equal(400);
-          expect(json_response.success).to.be.false;
-          expect(json_response.message).to.contain('client_resource_id');
-          done();
+        {
+          json: function(status_code, json_response) {
+            expect(status_code).to.equal(400);
+            expect(json_response.success).to.be.false;
+            expect(json_response.message).to.contain('client_resource_id');
+            done();
         }
       });
     });
 
-    it.skip('should produce an error if there is no connection to rippled', function(done){
+    it('should produce an error if there is no connection to rippled', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -264,20 +274,23 @@ describe('api/payments', function(){
           callback();
         }
       };
-       
-      var remote = {
-        _getServer: function() {
-          return {
-            _lastLedgerClose: Date.now() - server_lib.CONNECTION_TIMEOUT - 1 // Considered disconnected
-          };
-        },
-        once: function(){},
-        on: function(){},
-        connect: function(){},
-        removeListener: function(){}
+
+      var remote = new ripple.Remote({
+        servers: [ ],
+        storage: dbinterface
+      });
+
+      var Server = new process.EventEmitter;
+
+      Server._lastLedgerClose = Date.now() - 1;
+      Server._score = 0;
+
+      remote._getServer = function() {
+        return Server;
       };
 
-      payments.submit.skip({
+      payments.submit(
+       {
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -288,8 +301,7 @@ describe('api/payments', function(){
               throw new Error('Not implemented');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -315,7 +327,7 @@ describe('api/payments', function(){
       });
     });
 
-    it.skip('should produce an error if the source_account is missing', function(done){
+    it('should produce an error if the source_account is missing', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -338,7 +350,7 @@ describe('api/payments', function(){
         removeListener: function(){}
       };
 
-      payments.submit.skip({
+      payments.submit({
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -349,8 +361,7 @@ describe('api/payments', function(){
               throw new Error('Not implemented');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             // source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -376,7 +387,7 @@ describe('api/payments', function(){
       });
     });
 
-    it.skip('should produce an error if the source_account is invalid', function(done){
+    it('should produce an error if the source_account is invalid', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -399,7 +410,7 @@ describe('api/payments', function(){
         removeListener: function(){}
       };
 
-      payments.submit.skip({
+      payments.submit({
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -410,8 +421,7 @@ describe('api/payments', function(){
               throw new Error('Not implemented');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             source_account: 'not an address',
@@ -437,7 +447,7 @@ describe('api/payments', function(){
       });
     });
 
-    it.skip('should produce an error if the destination_account is missing', function(done){
+    it('should produce an error if the destination_account is missing', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -460,7 +470,7 @@ describe('api/payments', function(){
         removeListener: function(){}
       };
 
-      payments.submit.skip({
+      payments.submit({
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -471,8 +481,7 @@ describe('api/payments', function(){
               throw new Error('Not implemented');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -498,7 +507,7 @@ describe('api/payments', function(){
       });
     });
 
-    it.skip('should produce an error if the destination_account is invalid', function(done){
+    it('should produce an error if the destination_account is invalid', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -521,7 +530,7 @@ describe('api/payments', function(){
         removeListener: function(){}
       };
 
-      payments.submit.skip({
+      payments.submit({
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -532,8 +541,7 @@ describe('api/payments', function(){
               throw new Error('Not implemented');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -560,7 +568,7 @@ describe('api/payments', function(){
     });
 
 
-    it.skip('should produce an error if the destination_amount is missing', function(done){
+    it('should produce an error if the destination_amount is missing', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -583,7 +591,7 @@ describe('api/payments', function(){
         removeListener: function(){}
       };
 
-      payments.submit.skip({
+      payments.submit({
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -594,8 +602,7 @@ describe('api/payments', function(){
               throw new Error('Not implemented');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -621,7 +628,7 @@ describe('api/payments', function(){
       });
     });
 
-    it.skip('should produce an error if the destination_amount is invalid', function(done){
+    it('should produce an error if the destination_amount is invalid', function(done){
       var dbinterface = {
         getTransaction: function(params, callback) {
           //console.log('dbinterface.getTransaction');
@@ -644,7 +651,7 @@ describe('api/payments', function(){
         removeListener: function(){}
       };
 
-      payments.submit.skip({
+      payments.submit({
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -655,8 +662,7 @@ describe('api/payments', function(){
               throw new Error('Not implemented');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -707,13 +713,13 @@ describe('api/payments', function(){
         account: function(){
           return {
             submit: function(transaction){
-              transaction.emit.skip('proposed');
+              transaction.emit('proposed');
             }
           };
         }
       };
 
-      payments.submit.skip({
+      payments.submit({
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -724,8 +730,7 @@ describe('api/payments', function(){
               expect(false, 'Should not get here');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -778,13 +783,13 @@ describe('api/payments', function(){
         account: function(){
           return {
             submit: function(transaction){
-              transaction.emit.skip('error', new Error('some error'));
+              transaction.emit('error', new Error('some error'));
             }
           };
         }
       };
 
-      payments.submit.skip({
+      payments.submit({
         remote: remote,
         dbinterface: dbinterface,
         config: {
@@ -795,8 +800,7 @@ describe('api/payments', function(){
               expect(false, 'Should not get here');
             }
           }
-        }
-      }, {
+        },
         body: {
           payment: {
             source_account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -827,14 +831,14 @@ describe('api/payments', function(){
 
   describe('.get()', function(){
 
-    it.skip('should respond with an error if the account is missing', function(done){
+    it('should respond with an error if the account is missing', function(done){
 
-      var $ = {};
       var req = {
         params: {
           identifier: 'someid'
         }
       };
+
       var res = {
         json: function(status_code, json_response) {
           expect(status_code).to.equal(400);
@@ -842,15 +846,15 @@ describe('api/payments', function(){
           done();
         }
       };
+
       var next = function(err){};
 
-      payments.get($, req, res, next);
+      payments.get(req, res, next);
 
     });
 
-    it.skip('should respond with an error if the account is invalid', function(done){
+    it('should respond with an error if the account is invalid', function(done){
 
-      var $ = {};
       var req = {
         params: {
           account: 'not a valid account',
@@ -866,13 +870,12 @@ describe('api/payments', function(){
       };
       var next = function(err){};
 
-      payments.get($, req, res, next);
+      payments.get(req, res, next);
 
     });
 
-    it.skip('should respond with an error if the identifier is missing', function(done){
+    it('should respond with an error if the identifier is missing', function(done){
 
-      var $ = {};
       var req = {
         params: {
           account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz'
@@ -887,13 +890,12 @@ describe('api/payments', function(){
       };
       var next = function(err){};
 
-      payments.get($, req, res, next);
+      payments.get(req, res, next);
 
     });
 
-    it.skip('should respond with an error if the account is invalid', function(done){
+    it('should respond with an error if the account is invalid', function(done){
 
-      var $ = {};
       var req = {
         params: {
           account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
@@ -909,13 +911,17 @@ describe('api/payments', function(){
       };
       var next = function(err){};
 
-      payments.get($, req, res, next);
+      payments.get(req, res, next);
 
     });
 
-    it.skip('should respond with an error if there is no connection to rippled', function(done){
+    it('should respond with an error if there is no connection to rippled', function(done){
 
-      var $ = {
+      var req = {
+        params: {
+          account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
+          identifier: 'someid'
+        },
         remote: {
           _getServer: function() {
             return {
@@ -928,12 +934,6 @@ describe('api/payments', function(){
           removeListener: function(){}
         }
       };
-      var req = {
-        params: {
-          account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
-          identifier: 'someid'
-        }
-      };
       var res = {
         json: function(status_code, json_response) {
           expect(status_code).to.equal(500);
@@ -943,13 +943,17 @@ describe('api/payments', function(){
       };
       var next = function(err){};
 
-      payments.get($, req, res, next);
+      payments.get(req, res, next);
 
     });
 
     it.skip('should respond with an error if no transaction is found for the given identifier', function(done){
 
-      var $ = {
+      var req = {
+        params: {
+          account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
+          identifier: 'FAKE6E9754025BA2534A78707605E0601F03ACE063687A0CA1BDDACFCD1698C7'
+        },
         remote: {
           _getServer: function() {
             return {
@@ -970,12 +974,6 @@ describe('api/payments', function(){
           }
         }
       };
-      var req = {
-        params: {
-          account: 'rKXCummUHnenhYudNb9UoJ4mGBR75vFcgz',
-          identifier: 'FAKE6E9754025BA2534A78707605E0601F03ACE063687A0CA1BDDACFCD1698C7'
-        }
-      };
       var res = {
         json: function(status_code, json_response) {
           expect(status_code).to.equal(404);
@@ -985,13 +983,17 @@ describe('api/payments', function(){
       };
       var next = function(err){};
 
-      payments.get($, req, res, next);
+      payments.get(req, res, next);
 
     });
 
     it.skip('should respond with an error if the transaction is not a payment', function(done){
 
-      var $ = {
+      var req = {
+        params: {
+          account: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59',
+          identifier: '389720F6FD8A144F171708F9ECB334D704CBCFEFBCDA152D931AC34FB5F9E32B'
+        },
         remote: {
           _getServer: function() {
             return {
@@ -1052,22 +1054,16 @@ describe('api/payments', function(){
           }
         }
       };
-      var req = {
-        params: {
-          account: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59',
-          identifier: '389720F6FD8A144F171708F9ECB334D704CBCFEFBCDA152D931AC34FB5F9E32B'
-        }
-      };
       var res = {
         json: function(status_code, json_response) {
-          expect(status_code).to.equal(400);
+          expect(status_code).to.equal(500);
           expect(json_response.message).to.contain('Not a payment');
           done();
         }
       };
       var next = function(err){};
 
-      payments.get($, req, res, next);
+      payments.get(req, res, next);
 
     });
 
@@ -1470,9 +1466,11 @@ describe('api/payments', function(){
 
   describe('.getAccountPayments()', function(){
 
-    it.skip('should respond with an error if the account is missing', function(done){
+    it('should respond with an error if the account is missing', function(done){
 
-      var $ = {
+      var req = {
+        params: {},
+        query: {},
         remote: {
           _getServer: function() {
             return {
@@ -1484,10 +1482,6 @@ describe('api/payments', function(){
           connect: function(){},
           removeListener: function(){}
         }
-      };
-      var req = {
-        params: {},
-        query: {}
       };
       var res = {
         json: function(status_code, json_response) {
@@ -1498,31 +1492,30 @@ describe('api/payments', function(){
       };
       var next = function(error){};
 
-      payments.getAccountPayments($, req, res, next);
+      payments.getAccountPayments(req, res, next);
 
     });
 
-    it.skip('should respond with an error if the account is invalid', function(done){
+    it('should respond with an error if the account is invalid', function(done){
 
-      var $ = {
-        remote: {
-          _getServer: function() {
-            return {
-              _lastLedgerClose: Date.now() // Considered connected
-            };
-          },
-          once: function(){},
-          on: function(){},
-          connect: function(){},
-          removeListener: function(){}
-        }
-      };
       var req = {
         params: {
           account: 'not a valid account'
         },
-        query: {}
+        query: {},
+        remote: {
+          _getServer: function() {
+            return {
+              _lastLedgerClose: Date.now() // Considered connected
+            };
+          },
+          once: function(){},
+          on: function(){},
+          connect: function(){},
+          removeListener: function(){}
+        }
       };
+
       var res = {
         json: function(status_code, json_response) {
           expect(status_code).to.equal(400);
@@ -1532,13 +1525,17 @@ describe('api/payments', function(){
       };
       var next = function(error){};
 
-      payments.getAccountPayments($, req, res, next);
+      payments.getAccountPayments(req, res, next);
 
     });
 
-    it.skip('should respond with an error if there is no connection to rippled', function(done){
+    it('should respond with an error if there is no connection to rippled', function(done){
 
-      var $ = {
+      var req = {
+        params: {
+          account: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59'
+        },
+        query: {},
         remote: {
           _getServer: function() {
             return {
@@ -1551,12 +1548,6 @@ describe('api/payments', function(){
           removeListener: function(){}
         }
       };
-      var req = {
-        params: {
-          account: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59'
-        },
-        query: {}
-      };
       var res = {
         json: function(status_code, json_response) {
           expect(status_code).to.equal(500);
@@ -1566,13 +1557,17 @@ describe('api/payments', function(){
       };
       var next = function(error){};
 
-      payments.getAccountPayments($, req, res, next);
+      payments.getAccountPayments(req, res, next);
 
     });
 
     it.skip('should filter the results to include only payments', function(done){
 
-      var $ = {
+      var req = {
+        params: {
+          account: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59'
+        },
+        query: {},
         remote: {
           _getServer: function() {
             return {
@@ -1595,12 +1590,6 @@ describe('api/payments', function(){
             callback();
           }
         }
-      };
-      var req = {
-        params: {
-          account: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59'
-        },
-        query: {}
       };
       var res = {
         json: function(status_code, json_response) {
@@ -1636,16 +1625,21 @@ describe('api/payments', function(){
         expect(error).not.to.exist;
       };
 
-      payments.getAccountPayments($, req, res, next);
+      payments.getAccountPayments(req, res, next);
 
     });
 
     it.skip('should produce an array of objects that have a "client_resource_id" field and a "payment" field', function(done){
 
-      var $ = {
+      var req = {
+        params: {
+          account: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59'
+        },
+        query: {},
         remote: {
           _getServer: function() {
             return {
+              isConnected: function(){console.log("isConnected used"); return true},
               _lastLedgerClose: Date.now()
             };
           },
@@ -1682,12 +1676,6 @@ describe('api/payments', function(){
           }
         }
       };
-      var req = {
-        params: {
-          account: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59'
-        },
-        query: {}
-      };
       var res = {
         json: function(status_code, json_response) {
           expect(json_response.payments).to.have.length(4);
@@ -1707,7 +1695,7 @@ describe('api/payments', function(){
         expect(error).not.to.exist;
       };
 
-      payments.getAccountPayments($, req, res, next);
+      payments.getAccountPayments(req, res, next);
 
     });
 
