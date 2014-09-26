@@ -60,6 +60,10 @@ function submitPayment(request, response, next) {
   params.max_fee = Number(request.body.max_fee) > 0 ? utils.xrpToDrops(request.body.max_fee) : void(0);
   params.url_base = request.protocol + '://' + request.hostname + (config && config.get('port') ? ':' + config.get('port') : '');
 
+  if (request.hostname === 'api.ripple.com') {
+    params.url_base = 'https://' + request.hostname;
+  }
+
   if (params.payment.destination_amount && params.payment.destination_amount.currency !== 'XRP' && _.isEmpty(params.payment.destination_amount.issuer)) {
     params.payment.destination_amount.issuer = params.payment.destination_account;
   }
