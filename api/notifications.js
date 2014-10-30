@@ -38,6 +38,11 @@ function getNotification(request, response, next) {
 
     // Add url_base to each url in notification
     var url_base = request.protocol + '://' + request.hostname + (config && config.get('port') ? ':' + config.get('port') : '');
+
+    if (request.hostname === 'api.ripple.com') {
+      url_base = 'https://' + request.hostname;
+    }
+
     Object.keys(responseBody.notification).forEach(function(key){
       if (/url/.test(key) && responseBody.notification[key]) {
         responseBody.notification[key] = url_base + responseBody.notification[key];
