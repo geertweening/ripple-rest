@@ -147,7 +147,7 @@ suite('payments', function() {
       })
   });
 
-  test('Posting XRP from genesis to alice',function(done) {
+  test.skip('Posting XRP from genesis to alice',function(done) {
     var _subscribe = function(data,ws) {
       delete data.id;
       assert.deepEqual(data,{
@@ -478,7 +478,7 @@ suite('payments', function() {
 
 
   // confirm payment via client resource ID
-  test('check status url of the reserve_base_xrp transfer from alice to bob', function(done) {
+  test.skip('check status url of the reserve_base_xrp transfer from alice to bob', function(done) {
 
     orderlist.create([{command:'tx'}])
     var _tx = function(data,ws) {
@@ -532,7 +532,7 @@ suite('payments', function() {
 
 
   // confirm payment via transaction hash
-  test('confirm payment via transaction hash', function(done) {
+  test.skip('confirm payment via transaction hash', function(done) {
     orderlist.create([{command:'tx'}]);
     var _tx = function(data,ws) {
       orderlist.mark('tx');
@@ -966,7 +966,7 @@ suite('payments', function() {
       })
   });
 
-  test('Double posting XRP from genesis to dan with valid client resource id',function(done) {
+  test.skip('Double posting XRP from genesis to dan with valid client resource id',function(done) {
     store.paymentGenesisToDan["client_resource_id"] = "qwerty";
     app.post('/v1/accounts/' + fixtures.accounts.alice.address + '/payments')
       .send(store.paymentGenesisToDan)
@@ -1178,7 +1178,7 @@ suite('payments', function() {
       .end(done);
   });
 
-  test('Posting 10USD from carol to dan with valid client resource id and correct secret but client resource id already used',function(done) {
+  test.skip('Posting 10USD from carol to dan with valid client resource id and correct secret but client resource id already used',function(done) {
     store.paymentCarolToDan.payment.destination_amount.value = store.value;
     store.paymentCarolToDan.secret = fixtures.accounts.carol.secret;
     store.client_resource_id = store.paymentCarolToDan.client_resource_id;

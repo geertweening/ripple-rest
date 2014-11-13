@@ -142,10 +142,10 @@ function submitTransaction(data, response, callback) {
     };
 
     transaction.on('submitted', function(message) {
-      if (isInLedger(message)) {
-        // Save when submitted and will be included in the ledger
-        setImmediate(saveTransaction);
-      }
+//      if (isInLedger(message)) {
+//        // Save when submitted and will be included in the ledger
+//        setImmediate(saveTransaction);
+//      }
     });
 
     transaction.once('submitted', function(message) {
@@ -159,6 +159,8 @@ function submitTransaction(data, response, callback) {
     });
 
     transaction.once('error', handleError);
+
+    transaction.once('succes', handleSubmission);
 
     transaction.once('cleanup', function(message) {
       if (/^tes/.test(message.engine_result) && data.validated === true) {
