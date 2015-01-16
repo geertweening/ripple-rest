@@ -634,6 +634,63 @@
         }
       }
     },
+    "newrelic": {
+      "version": "1.16.1",
+      "from": "newrelic@>=1.14.6 <2.0.0",
+      "resolved": "https://registry.npmjs.org/newrelic/-/newrelic-1.16.1.tgz",
+      "dependencies": {
+        "continuation-local-storage": {
+          "version": "3.1.2",
+          "from": "continuation-local-storage@^3.1.0",
+          "resolved": "https://registry.npmjs.org/continuation-local-storage/-/continuation-local-storage-3.1.2.tgz",
+          "dependencies": {
+            "emitter-listener": {
+              "version": "1.0.1",
+              "from": "emitter-listener@1.0.1",
+              "resolved": "https://registry.npmjs.org/emitter-listener/-/emitter-listener-1.0.1.tgz",
+              "dependencies": {
+                "shimmer": {
+                  "version": "1.0.0",
+                  "from": "shimmer@1.0.0",
+                  "resolved": "https://registry.npmjs.org/shimmer/-/shimmer-1.0.0.tgz"
+                }
+              }
+            },
+            "async-listener": {
+              "version": "0.4.7",
+              "from": "async-listener@0.4.7",
+              "resolved": "https://registry.npmjs.org/async-listener/-/async-listener-0.4.7.tgz",
+              "dependencies": {
+                "shimmer": {
+                  "version": "1.0.0",
+                  "from": "shimmer@1.0.0",
+                  "resolved": "https://registry.npmjs.org/shimmer/-/shimmer-1.0.0.tgz"
+                }
+              }
+            }
+          }
+        },
+        "json-stringify-safe": {
+          "version": "5.0.0",
+          "from": "json-stringify-safe@^5.0.0",
+          "resolved": "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.0.tgz"
+        },
+        "proxying-agent": {
+          "version": "0.1.6",
+          "from": "proxying-agent@^0.1.6",
+          "resolved": "https://registry.npmjs.org/proxying-agent/-/proxying-agent-0.1.6.tgz"
+        },
+        "semver": {
+          "version": "4.2.0",
+          "from": "semver@^4.1.0",
+          "resolved": "https://registry.npmjs.org/semver/-/semver-4.2.0.tgz"
+        },
+        "yakaa": {
+          "version": "1.0.1",
+          "from": "yakaa@^1.0.1"
+        }
+      }
+    },
     "node-uuid": {
       "version": "1.4.2",
       "from": "node-uuid@>=1.4.1 <1.5.0",
