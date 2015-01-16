@@ -20,5 +20,15 @@ exports.config = {
      * production applications.
      */
     level : 'info'
+  },
+  error_collector : {
+    enabled : true,
+   /**
+    * Comma-delimited list of HTTP status codes for the error collector to ignore.
+    * Defaults to ignore_status_codes : [404] (not found).
+    * The NEW_RELIC_ERROR_COLLECTOR_IGNORE_ERROR_CODES environment variable
+    * overrides this if used.
+    */
+    ignore_status_codes : [400, 404]
   }
 };
