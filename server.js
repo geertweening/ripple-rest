@@ -1,3 +1,6 @@
+// setup newrelic
+require('newrelic');
+
 var fs        = require('fs');
 var https     = require('https');
 var constants = require('constants')
